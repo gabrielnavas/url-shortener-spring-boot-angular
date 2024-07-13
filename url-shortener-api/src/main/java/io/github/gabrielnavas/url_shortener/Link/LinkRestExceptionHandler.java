@@ -36,4 +36,13 @@ public class LinkRestExceptionHandler {
                 .build();
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(LinkIsNotValidException.class)
+    public ResponseEntity<ApiError> linkNotFound(LinkIsNotValidException ex) {
+        ApiError apiError = ApiError
+                .builder()
+                .errors(List.of(ex.getMessage()))
+                .build();
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
 }

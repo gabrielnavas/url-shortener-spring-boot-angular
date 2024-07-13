@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -16,7 +19,14 @@ public class LinkService {
     private final LinkRepository linkRepository;
     private final LinkMapper linkMapper;
 
-    public LinkResponse createLink(LinkRequest request) {
+    public LinkResponse createLink(LinkRequest request, String host) {
+        try {
+            URL url = new URL(request.urlOriginal());
+            url.toURI();
+        } catch (URISyntaxException | MalformedURLException ex) {
+            throw new LinkIsNotValidException(request.urlOriginal());
+        }
+
         verifyUrlOriginal(request.urlOriginal());
 
         final LocalDateTime now = getNow();
@@ -34,16 +44,18 @@ public class LinkService {
                 .build();
 
         link = linkRepository.save(link);
+        link.setUrlShorted(String.format("%s/%s", host, link.getUrlShorted()));
         return linkMapper.toLinkResponse(link);
     }
 
-    public LinkResponse findLinkByUrlShortened(String urlShortened) {
+    public LinkResponse findLinkByUrlShortened(String urlShortened, String host) {
         final LocalDateTime now = getNow();
         Optional<Link> optionalLink = linkRepository.findByUrlShorted(urlShortened, now);
         if (optionalLink.isEmpty()) {
             throw new LinkNotFoundException(urlShortened);
         }
         final Link link = optionalLink.get();
+        link.setUrlShorted(String.format("%s/%s", host, link.getUrlShorted()));
         return linkMapper.toLinkResponse(link);
     }
 
