@@ -23,8 +23,7 @@ public class LinkController {
 
     @GetMapping("/{url-shortened}")
     public ResponseEntity<LinkResponse> getLink(
-            @PathVariable("url-shortened") String urlShortened,
-            @RequestHeader String host
+            @PathVariable("url-shortened") String urlShortened
     ) {
         final LinkResponse linkResponse = linkService.findLinkByUrlShortened(urlShortened);
         return ResponseEntity.status(HttpStatus.OK).body(linkResponse);
