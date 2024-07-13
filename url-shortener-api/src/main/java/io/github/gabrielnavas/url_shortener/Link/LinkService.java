@@ -29,7 +29,7 @@ public class LinkService {
                 .urlShorted(urlShorted)
                 .createdAt(now)
                 .expireAt(expireDays)
-                .urlQrCode(generateQrCode(urlShorted))
+                .urlQrCode(generateQrCode())
                 .isExpired(false)
                 .build();
 
@@ -81,7 +81,7 @@ public class LinkService {
         return ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")).toLocalDateTime();
     }
 
-    private String generateQrCode(String urlShortened) {
+    private String generateQrCode() {
         return "not implemented yet";
     }
 }
