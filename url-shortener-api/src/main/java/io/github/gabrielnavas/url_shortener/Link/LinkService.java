@@ -65,15 +65,18 @@ public class LinkService {
     private void verifyUrlOriginal(String urlOriginal) {
         final LocalDateTime now = getNow();
         Optional<Link> optionalLink = linkRepository.findByUrlOriginal(urlOriginal, now);
-        if (optionalLink.isPresent()) {
-            final Link link = optionalLink.get();
-            if (link.getExpireAt().isBefore(getNow())) {
-                link.setExpired(true);
-                linkRepository.save(link);
-                throw new LinkAlreadyExpiredAtException(link.getUrlOriginal(), link.getExpireAt());
-            } else {
-                throw new LinkAlreadyExistsException(urlOriginal);
-            }
+        if (optionalLink.isEmpty()) {
+            return;
+        }
+
+        final Link link = optionalLink.get();
+
+        if (link.getExpireAt().isBefore(getNow())) {
+            link.setExpired(true);
+            linkRepository.save(link);
+            throw new LinkAlreadyExpiredAtException(link.getUrlOriginal(), link.getExpireAt());
+        } else {
+            throw new LinkAlreadyExistsException(urlOriginal);
         }
     }
 
