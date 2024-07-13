@@ -1,5 +1,6 @@
 package io.github.gabrielnavas.url_shortener.Link;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/url-shortener")
 @RequiredArgsConstructor
+@Tag(name = "Link")
 public class LinkController {
 
     private final LinkService linkService;
