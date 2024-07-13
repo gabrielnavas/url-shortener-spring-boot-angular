@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-url-shortener
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: username
+      POSTGRES_DB: url-shortener
+    ports:
+      - "5432:5432"
