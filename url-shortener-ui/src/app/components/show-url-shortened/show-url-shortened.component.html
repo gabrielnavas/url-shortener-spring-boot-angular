@@ -1,0 +1,14 @@
+<mat-card class="container">
+  <mat-card-content>
+    <h1>
+      {{ urlShortened }}
+    </h1>
+  </mat-card-content>
+  <mat-card-footer>
+    <button (click)="onClickCopyUrl()" [disabled]="linkCopied" color="primary" mat-raised-button>
+      <span>
+        {{ linkCopied ? 'URL copied' : 'Copy Short URL' }}
+      </span>
+    </button>
+  </mat-card-footer>
+</mat-card>

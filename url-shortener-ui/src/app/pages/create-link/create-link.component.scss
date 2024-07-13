@@ -1,0 +1,17 @@
+.container {
+  padding-top: 130px;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+
+
+  mat-form-field {
+    width: 600px;
+  }
+
+  button {
+    margin-left: 20px;
+    height: 75px;
+    width: 150px;
+  }
+}

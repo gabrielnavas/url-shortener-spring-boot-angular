@@ -1,0 +1,12 @@
+<div class="container">
+  <div>
+    <mat-form-field>
+      <input [(ngModel)]="form.url" matInput placeholder="https://example.com/other">
+    </mat-form-field>
+    <button (click)="onClickShortener()" [disabled]="isLoading" color="primary" mat-raised-button>Short!</button>
+  </div>
+
+  <div *ngIf="linkResponse">
+    <app-show-url-shortened [urlShortened]="linkResponse.urlShorted"></app-show-url-shortened>
+  </div>
+</div>
