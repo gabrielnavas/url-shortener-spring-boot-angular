@@ -15,17 +15,19 @@ public class LinkController {
 
     @PostMapping
     public ResponseEntity<LinkResponse> createLink(
-            @RequestBody @Valid LinkRequest request
+            @RequestBody @Valid LinkRequest request,
+            @RequestHeader String host
     ) {
-        final LinkResponse linkResponse = linkService.createLink(request);
+        final LinkResponse linkResponse = linkService.createLink(request, host);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(linkResponse);
     }
 
     @GetMapping("/{url-shortened}")
     public ResponseEntity<LinkResponse> getLink(
-            @PathVariable("url-shortened") String urlShortened
+            @PathVariable("url-shortened") String urlShortened,
+            @RequestHeader String host
     ) {
-        final LinkResponse linkResponse = linkService.findLinkByUrlShortened(urlShortened);
+        final LinkResponse linkResponse = linkService.findLinkByUrlShortened(urlShortened, host);
         return ResponseEntity.status(HttpStatus.OK).body(linkResponse);
     }
 }
