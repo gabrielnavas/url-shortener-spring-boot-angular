@@ -17,4 +17,8 @@ export class LinkService {
   createLink(params: { body: LinkRequest }): Observable<LinkResponse> {
     return this.httpClient.post<LinkResponse>('http://localhost:8080/api/v1/url-shortener', params.body)
   }
+
+  findUrlByShortened(urlShortened: string): Observable<LinkResponse> {
+    return this.httpClient.get<LinkResponse>(`http://localhost:8080/api/v1/url-shortener/${urlShortened}`,)
+  }
 }

@@ -17,19 +17,17 @@ public class LinkController {
 
     @PostMapping
     public ResponseEntity<LinkResponse> createLink(
-            @RequestBody @Valid LinkRequest request,
-            @RequestHeader String host
+            @RequestBody @Valid LinkRequest request
     ) {
-        final LinkResponse linkResponse = linkService.createLink(request, host);
+        final LinkResponse linkResponse = linkService.createLink(request);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(linkResponse);
     }
 
-    @GetMapping("/{url-shortened}")
-    public ResponseEntity<LinkResponse> getLink(
-            @PathVariable("url-shortened") String urlShortened,
-            @RequestHeader String host
+    @GetMapping("/{token}")
+    public ResponseEntity<LinkResponse> findLinkByToken(
+            @PathVariable String token
     ) {
-        final LinkResponse linkResponse = linkService.findLinkByUrlShortened(urlShortened, host);
+        final LinkResponse linkResponse = linkService.findLinkByToken(token);
         return ResponseEntity.status(HttpStatus.OK).body(linkResponse);
     }
 }

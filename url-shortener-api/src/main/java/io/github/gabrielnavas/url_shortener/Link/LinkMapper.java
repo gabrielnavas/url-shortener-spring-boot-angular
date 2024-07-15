@@ -7,7 +7,7 @@ public class LinkMapper {
     public LinkResponse toLinkResponse(Link link) {
         return LinkResponse.builder()
                 .urlOriginal(link.getUrlOriginal())
-                .urlShorted(link.getUrlShorted())
+                .token(link.getToken())
                 .createdAt(link.getCreatedAt())
                 .expireAt(link.getExpireAt())
                 .urlQrCode(link.getUrlQrCode())

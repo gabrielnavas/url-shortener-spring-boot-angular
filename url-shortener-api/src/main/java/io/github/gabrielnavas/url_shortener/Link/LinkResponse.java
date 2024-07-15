@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Builder
 public record LinkResponse(
         String urlOriginal,
-        String urlShorted,
+        String token,
         String urlQrCode,
         LocalDateTime expireAt,
         LocalDateTime createdAt

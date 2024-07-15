@@ -1,6 +1,6 @@
 export interface LinkResponse {
   urlOriginal: string
-  urlShorted: string
+  token: string
   urlQrCode: string
   expireAt: Date
   createdAt: Date

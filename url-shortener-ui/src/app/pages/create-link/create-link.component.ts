@@ -26,6 +26,7 @@ import {Title} from "@angular/platform-browser";
 })
 export class CreateLinkComponent {
   linkResponse: LinkResponse | undefined = undefined;
+  urlShorted = ''
   isLoading = false
   form = {
     url: ''
@@ -51,11 +52,20 @@ export class CreateLinkComponent {
         this.linkResponse = linkResponse;
         this.isLoading = false;
         this._snackBar.dismiss();
+        this.makeUrlShorted(this.linkResponse.token)
       },
       error: err => {
         this._snackBar.open(err.error.errors[0]);
         this.isLoading = false;
       },
     })
+  }
+
+  private makeUrlShorted(token: string) {
+    let preUrl = `${window.location.protocol}//${window.location.hostname}`;
+    if (window.location.port !== '80') {
+      preUrl = `${preUrl}:${window.location.port}`;
+    }
+    this.urlShorted = `${preUrl}/${token}`;
   }
 }

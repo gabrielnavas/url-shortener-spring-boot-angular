@@ -19,7 +19,7 @@ public class LinkService {
     private final LinkRepository linkRepository;
     private final LinkMapper linkMapper;
 
-    public LinkResponse createLink(LinkRequest request, String host) {
+    public LinkResponse createLink(LinkRequest request) {
         try {
             URL url = new URL(request.urlOriginal());
             url.toURI();
@@ -32,11 +32,11 @@ public class LinkService {
         final LocalDateTime now = getNow();
         final LocalDateTime expireDays = now.plusDays(7);
 
-        final String urlShorted = generateRandomShortUrl();
+        final String urlShorted = generateToken();
 
         Link link = Link.builder()
                 .urlOriginal(request.urlOriginal())
-                .urlShorted(urlShorted)
+                .token(urlShorted)
                 .createdAt(now)
                 .expireAt(expireDays)
                 .urlQrCode(generateQrCode())
@@ -44,29 +44,27 @@ public class LinkService {
                 .build();
 
         link = linkRepository.save(link);
-        link.setUrlShorted(String.format("%s/%s", host, link.getUrlShorted()));
         return linkMapper.toLinkResponse(link);
     }
 
-    public LinkResponse findLinkByUrlShortened(String urlShortened, String host) {
+    public LinkResponse findLinkByToken(String token) {
         final LocalDateTime now = getNow();
-        Optional<Link> optionalLink = linkRepository.findByUrlShorted(urlShortened, now);
+        Optional<Link> optionalLink = linkRepository.findValidLinkByToken(token, now);
         if (optionalLink.isEmpty()) {
-            throw new LinkNotFoundException(urlShortened);
+            throw new LinkNotFoundException(token);
         }
         final Link link = optionalLink.get();
-        link.setUrlShorted(String.format("%s/%s", host, link.getUrlShorted()));
         return linkMapper.toLinkResponse(link);
     }
 
-    private String generateRandomShortUrl() {
+    private String generateToken() {
         final int min = 5;
         final int max = 5;
         final int maxTries = 50;
         final LocalDateTime now = getNow();
         for (int i = 0; i < 50; i++) {
             String urlShorted = RandomStringUtils.randomAlphanumeric(min, max);
-            Optional<Link> optionalLink = linkRepository.findByUrlShorted(urlShorted, now);
+            Optional<Link> optionalLink = linkRepository.findValidLinkByToken(urlShorted, now);
             if (optionalLink.isEmpty()) {
                 return urlShorted;
             }
@@ -76,7 +74,7 @@ public class LinkService {
 
     private void verifyUrlOriginal(String urlOriginal) {
         final LocalDateTime now = getNow();
-        Optional<Link> optionalLink = linkRepository.findByUrlOriginal(urlOriginal, now);
+        Optional<Link> optionalLink = linkRepository.findValidLinkByUrlOriginal(urlOriginal, now);
         if (optionalLink.isEmpty()) {
             return;
         }

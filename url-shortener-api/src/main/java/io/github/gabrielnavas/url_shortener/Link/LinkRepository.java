@@ -12,10 +12,10 @@ public interface LinkRepository extends JpaRepository<Link, UUID> {
     @Query("""
                 SELECT link
                 FROM Link link
-                WHERE link.urlShorted = :urlShorted
+                WHERE link.token = :token
                 AND link.expireAt > :now
             """)
-    Optional<Link> findByUrlShorted(String urlShorted, LocalDateTime now);
+    Optional<Link> findValidLinkByToken(String token, LocalDateTime now);
 
     @Query("""
                 SELECT link
@@ -23,5 +23,5 @@ public interface LinkRepository extends JpaRepository<Link, UUID> {
                 WHERE link.urlOriginal = :urlOriginal
                 AND link.expireAt > :now
             """)
-    Optional<Link> findByUrlOriginal(String urlOriginal, LocalDateTime now);
+    Optional<Link> findValidLinkByUrlOriginal(String urlOriginal, LocalDateTime now);
 }

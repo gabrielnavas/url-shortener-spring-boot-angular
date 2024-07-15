@@ -23,7 +23,7 @@ public class Link {
     private String urlOriginal;
 
     @Column(nullable = false, length = 100)
-    private String urlShorted;
+    private String token;
 
     @Column(nullable = false)
     private String urlQrCode;
